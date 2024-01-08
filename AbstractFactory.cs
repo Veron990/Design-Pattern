@@ -21,7 +21,7 @@ public class WindowsButton : IButton //classe di un prodotto specifica per la ti
 
 public interface IGuiFactory //Factory base
     {
-        IButton CreateButton();
+        IButton CreateButton(); //Factory method
     }
 
 public class WindowsFactory : IGuiFactory //Factory della tipologia Windows
@@ -36,7 +36,7 @@ public class WindowsFactory : IGuiFactory //Factory della tipologia Windows
             return instance;
         }
 
-        public IButton CreateButton() 
+        public IButton CreateButton() //Factory method specifico per Windows
         {
             return new WindowsButton();
         }
@@ -44,7 +44,7 @@ public class WindowsFactory : IGuiFactory //Factory della tipologia Windows
 
 public class MacFactory : IGuiFactory //Factory della tipologia Mac
     {
-        public IButton CreateButton()  
+        public IButton CreateButton()  //Factory method specifico per Mac
         {
             return new MacButton();
         }
