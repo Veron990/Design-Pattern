@@ -1,0 +1,64 @@
+public interface IButton
+    {
+        void Paint();
+    }
+
+public class WindowsButton : IButton
+    {
+        public void Paint()
+        {
+            Console.WriteLine("windows button");
+        }
+    }
+
+    public class MacButton : IButton
+    {
+        public void Paint()
+        {
+            Console.WriteLine("mac button");
+        }
+    }
+
+public interface IGuiFactory
+    {
+        IButton CreateButton();
+    }
+
+public class WindowsFactory : IGuiFactory
+    {
+        //rendo questa classe un Singleton
+        private WindowsFactory(){ }
+
+        private static WindowsFactory instance = new WindowsFactory();
+      
+        public static WindowsFactory GetIstance()
+        {
+            return instance;
+        }
+
+        public IButton CreateButton() 
+        {
+            return new WindowsButton();
+        }
+    }
+
+public class MacFactory : IGuiFactory
+    {
+        public IButton CreateButton()  
+        {
+            return new MacButton();
+        }
+    }
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            IGuiFactory factory = WindowsFactory.GetIstance();
+            IButton windowsButton = factory.CreateButton();
+            windowsButton.Paint();
+
+            IGuiFactory factory2 = new MacFactory();
+            factory2.CreateButton().Paint();
+        }
+    }
