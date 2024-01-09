@@ -1,4 +1,4 @@
- public interface IColore
+public interface IColore
     {
         void ValidaColore();
     }
@@ -17,7 +17,15 @@
             Console.WriteLine("validato colore rgb");
         }
     }
+    public class ColoreHsv : IColore
+    {
+        public ColoreHsv() { }
 
+        public void ValidaColore()
+        {
+            Console.WriteLine("validato colore hsv");
+        }
+    }
     public class FactoryRgb : IFactoryColore
     {
         public IColore CreaColore()
@@ -26,20 +34,32 @@
         }
     }
 
+    public class FactoryHsv : IFactoryColore
+    {
+        public IColore CreaColore()
+        {
+            return new ColoreHsv();
+        }
+    }
+
     class ObjectPool
     {
         private List<IColore> _list;
         private IFactoryColore _factory;
 
-        public ObjectPool(IFactoryColore factory)
-        {
+        private ObjectPool() {
             _list = new List<IColore>();
+        }
+
+        public static ObjectPool Istance = new ObjectPool();
+
+        public void SetFactory(IFactoryColore factory) { 
             _factory = factory;
         }
 
         public IColore GetColor()
         {
-            if(_list.Count == 0)
+            if (_list.Count == 0)
             {
                 Console.WriteLine("\n--creo nuova istanza");
                 return _factory.CreaColore();
@@ -52,10 +72,15 @@
                 return color;
             }
         }
-        
+
         public void Restituisci(IColore colore)
         {
             _list.Add(colore);
+        }
+
+        public void PulisciPool()
+        {
+            _list.Clear();
         }
     }
 
@@ -63,8 +88,11 @@
     {
         static void Main(string[] args)
         {
-            IFactoryColore factory = new FactoryRgb();
-            ObjectPool pool = new ObjectPool(factory);
+            IFactoryColore factoryRgb = new FactoryRgb();
+            IFactoryColore factoryHsv = new FactoryHsv();
+
+            ObjectPool pool = ObjectPool.Istance;
+            pool.SetFactory(factoryRgb);
 
             IColore colore1 = pool.GetColor();
             colore1.ValidaColore();
@@ -72,11 +100,15 @@
             IColore colore2 = pool.GetColor();
             colore2.ValidaColore();
 
-            pool.Restituisci(colore1); //restituisco l' oggetto al pool quando non mi serve più cosicchè io possa riutilizzarlo
+            pool.Restituisci(colore1); //restituisco l' istanza al pool cosicchè posso usarla per un altra variabile ( color3 )
+
+            IColore colore3 = pool.GetColor();
+            colore3.ValidaColore();
+
             pool.Restituisci(colore2);
 
-            IColore colore3 = pool.GetColor(); //nel colore 3 e 4 riutilizzo l' istanza del colore 1 e 2
-            colore3.ValidaColore();
+            pool.PulisciPool(); //pulisco tutto il pool quando voflio cambiare factory
+            pool.SetFactory(factoryHsv);
 
             IColore colore4 = pool.GetColor();
             colore4.ValidaColore();
