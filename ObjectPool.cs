@@ -31,11 +31,14 @@ public class Persona
             private Queue<Persona> pool = new Queue<Persona>();
             private int _poolSize;
 
-            public ObjectPool(int size)
+            private ObjectPool() { }
+
+            public static ObjectPool Istance = new ObjectPool();
+
+            public void SetPoolSize(int size)
             {
                 _poolSize = size;
             }
-
             public Persona GetPersonaFromPool()
             {
                 if (pool.Count == 0) //pool vuoto => creo nuovo oggetto
@@ -55,17 +58,23 @@ public class Persona
 
             public void RitornaPersonaToPool(Persona p)
             {
+                string nomePersona = p.Nome;
                 if (pool.Count < _poolSize)
                 {
-                    string nomePersona = p.Nome;
                     p.Reset();
                     pool.Enqueue(p); //aggiunge un oggetto alla fine della coda
                     Console.WriteLine($"\n{nomePersona} è stato restituito al pool");
                 }
                 else
                 {
-                    Console.WriteLine("\nIl pool è pieno, impossibile restituire l'oggetto.");
+                    Console.WriteLine($"\nIl pool è pieno, impossibile restituire {nomePersona} al pool.");
                 }
+            }
+
+            public void SvuotaPool()
+            {
+                pool.Clear();
+                Console.WriteLine("\nPool svuotato");
             }
         }
 
@@ -73,7 +82,8 @@ public class Persona
         {
             static void Main(string[] args)
             {
-                ObjectPool pool = new ObjectPool(4);
+                ObjectPool pool = ObjectPool.Istance;
+                pool.SetPoolSize(3);
 
                 Persona p1 = pool.GetPersonaFromPool();
                 p1.SetPersona("Veronica");
@@ -87,6 +97,8 @@ public class Persona
                 p3.SetPersona("Luisa");
                 p3.Stampa();
 
+               
+
                 Persona p4 = pool.GetPersonaFromPool();
                 p4.SetPersona("Giacomo");
                 p4.Stampa();
@@ -94,13 +106,18 @@ public class Persona
                 pool.RitornaPersonaToPool(p1);
                 pool.RitornaPersonaToPool(p2);
                 pool.RitornaPersonaToPool(p3);
-                pool.RitornaPersonaToPool(p4);
+                pool.RitornaPersonaToPool(p4); //non può è pieno (max 3)
+
+                pool.SvuotaPool();
+                pool.RitornaPersonaToPool(p4); //ora si
 
                 Persona p5 = pool.GetPersonaFromPool();
-                //p5.SetPersona("Alessio");
+                p5.SetPersona("Alessio");
                 p5.Stampa();
+               
+                pool.RitornaPersonaToPool(p5);
 
-                pool.RitornaPersonaToPool(p5); 
+                
             }
         }
     }
