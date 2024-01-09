@@ -55,19 +55,12 @@ public class Pizza
             _builder = builder;
         }
 
-        public Pizza MakePizza()
+        public void MakePizza()
         {
             _builder
                 .SetImpasto()
                 .SetSalsa()
                 .SetCondimenti();
-
-            return GetPizza();
-        }
-
-        private Pizza GetPizza()
-        {
-            return _builder.Build();
         }
     }
     class Program
@@ -76,7 +69,8 @@ public class Pizza
         {
             IPizzaBuilder builder = new MargheritaBuilder();
             PizzaChef chef = new PizzaChef(builder);
-            Pizza pizza = chef.MakePizza();
+            chef.MakePizza();
+            Pizza pizza = builder.Build();
             pizza.Stampa();
         }
     }
