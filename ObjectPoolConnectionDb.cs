@@ -56,7 +56,7 @@ namespace ObjectPoolConnectionDb
     {
         static void Main(string[] args)
         {
-            string connectionString = "Server=DESKTOP-HTAJF83;Database=RazorPagesMovieContext;Trusted_Connection=true;TrustServerCertificate=True;";
+            string connectionString = "Server=NOME-Server;Database=NomeDatabase;Trusted_Connection=true;TrustServerCertificate=True;";
             int maxConnections = 2;
             SqlConnectionPool connectionPool = new SqlConnectionPool(connectionString, maxConnections);
 
