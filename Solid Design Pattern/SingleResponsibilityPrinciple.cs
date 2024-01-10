@@ -20,7 +20,7 @@ public class Diario //Si occupa solo di gestire la scrittura dei pensieri sul di
             return string.Join("\n", _pensieri);
         }
 
-        //Questa operazione rompe il Single Responsability Principle!
+        //Questa operazione rompe il Single Responsability Principle! => Trasferisco il metodo salva all' interno della classe apposita Persistenza
         //public void Salva(Diario diario, string nomeFile)
         //{
         //    File.WriteAllText(nomeFile, diario.ToString());
